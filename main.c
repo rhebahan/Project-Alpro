@@ -1,55 +1,86 @@
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
+#include <stdlib.h>
+#include <time.h>
 
 #define MAX 100
 
-// struct untuk gudang
-
-typedef struct{
+// ==========================
+// STRUCT
+// ==========================
+typedef struct {
     char nama[50];
     int stok;
-    int harga;
-    char expired[20];
-} barang;
+    int modal; // Harga Beli
+    int harga; // Harga Jual
+    char expired[20]; // Format: YYYY-MM-DD
+} Barang;
 
-// global function
+typedef struct {
+    char nama[50];
+    int jumlah;
+    int subtotal;
+    int keuntungan;
+} ItemBeli;
 
-barang gudang[MAX];
+// ==========================
+// GLOBAL
+// ==========================
+Barang gudang[MAX];
 int jumlahBarang = 0;
 
-// pakai function prototype (isinya di bawah)
-
+// ==========================
+// PROTOTYPE
+// ==========================
 void saveGudang();
 void loadGudang();
-void menuGudang();
-
-// fitur untuk pilihan gudang
-
-void tambahBarang();
-void hapusBarang();
-void tampilBarang();
-void cariBarang();
 void resetGudang();
 
-void sortingStok();
+// Menu Utama
+void menuGudang();
+void menuKasir();
+
+// Sub-Menu Gudang
+void menuManajemen();
+void tambahBarang();
+void restokBarang();
+void hapusBarang();
+
+// Sub-Menu Laporan
+void menuLaporanBarang();
+void laporanStokMenipis();
+void laporanExp();
+
+// Kasir
+void kasir();
+void laporanPenjualan();
+void cetakStruk(ItemBeli list[], int n, int total);
+
+// Helper
+void tampilGudang();
 void sortingExpired();
+void getTanggalHariIni(char *buffer);
+void catatLaporanPenjualan(char *nama, int qty, int modal, int hargaJual);
+
+void getTanggalHariIni(char *buffer) {
+    time_t t = time(NULL);
+    struct tm tm = *localtime(&t);
+    sprintf(buffer, "%04d-%02d-%02d", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday);
+}
 
 void saveGudang() {
     FILE *f = fopen("gudang.dat", "wb");
     fwrite(&jumlahBarang, sizeof(int), 1, f);
-    fwrite(gudang, sizeof(barang), jumlahBarang, f);
+    fwrite(gudang, sizeof(Barang), jumlahBarang, f);
     fclose(f);
 }
 
 void loadGudang() {
     FILE *f = fopen("gudang.dat", "rb");
     fread(&jumlahBarang, sizeof(int), 1, f);
-    fread(gudang, sizeof(barang), jumlahBarang, f);
+    fread(gudang, sizeof(Barang), jumlahBarang, f);
     fclose(f);
 }
-
-
 
 
 
@@ -59,4 +90,5 @@ int main() {
     printf("coba dulu, bisa gak");
     printf("");
     return 0;
+    
 }
