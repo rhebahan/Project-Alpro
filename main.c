@@ -51,16 +51,18 @@ void menuLaporanBarang();
 void laporanStokMenipis();
 void laporanExp();
 
-// Kasir
-void kasir();
-void laporanPenjualan();
-void cetakStruk(ItemBeli list[], int n, int total);
-
-// Helper
+// Helper Gudang
 void tampilGudang();
+void cariBarang();
 void sortingExpired();
 void getTanggalHariIni(char *buffer);
+
+// Kasir & Laporan Penjualan
+void kasir();
+void laporanPenjualan();
 void catatLaporanPenjualan(char *nama, int qty, int modal, int hargaJual);
+void cetakStruk(ItemBeli list[], int n, int total);
+
 
 void getTanggalHariIni(char *buffer) {
     time_t t = time(NULL);
@@ -82,7 +84,57 @@ void loadGudang() {
     fclose(f);
 }
 
+void resetGudang(){
 
+}
+
+// Menu Utama
+void menuGudang(){
+
+}
+
+void cariBarang(){
+
+}
+void menuKasir(){
+
+}
+
+// Sub-Menu Gudang
+void menuManajemen(){
+
+}
+void tambahBarang(){
+
+}
+void restokBarang(){
+
+}
+void hapusBarang(){
+
+}
+
+// Sub-Menu Laporan
+void menuLaporanBarang(){
+
+}
+void laporanStokMenipis(){
+
+}
+void laporanExp(){
+
+}
+
+// Kasir
+void kasir(){
+
+}
+void laporanPenjualan(){
+
+}
+void cetakStruk(ItemBeli list[], int n, int total){
+
+}
 
 
 
@@ -90,5 +142,5 @@ int main() {
     printf("coba dulu, bisa gak");
     printf("");
     return 0;
-    
+
 }
