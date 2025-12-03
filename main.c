@@ -110,6 +110,38 @@ void menuGudang(){
     } while (p != 0);
 }
 
+
+void cariBarang(){
+     nama[50];
+    printf("\n--- PENCARIAN BARANG ---\n");
+    printf("Masukkan Nama Barang: ");
+    scanf(" %[^\n]", nama);
+
+    int ditemukan = 0;
+
+    printf("\nHasil Pencarian:\n");
+    // Header Tabel Kecil
+    printf("%-15s | %-5s | %-8s | %-8s | %-12s\n", "Nama", "Stok", "Modal", "Jual", "Expired");
+    printf("-------------------------------------------------------------\n");
+
+    for (int i = 0; i < jumlahBarang; i++) {
+        // Menggunakan strcmp (pencarian persis)
+        if (strcmp(gudang[i].nama, nama) == 0) {
+            printf("%-15s | %-5d | %-8d | %-8d | %-12s\n", 
+                   gudang[i].nama, 
+                   gudang[i].stok, 
+                   gudang[i].modal, 
+                   gudang[i].harga,
+                   gudang[i].expired);
+            ditemukan = 1;
+            break; // Berhenti jika sudah ketemu (karena nama unik)
+        }
+    }
+    printf("-------------------------------------------------------------\n");
+
+    if (!ditemukan) {
+        printf("Barang '%s' tidak ditemukan di gudang.\n", nama);
+    }
 // Menu Utama
 void menuGudang(){
         int p;
@@ -149,6 +181,64 @@ int p;
         }
     } while (p != 0);
 }
+
+// Sub-Menu Gudang
+void menuManajemen(){
+    int p;
+    do {
+        printf("\n--- MANAJEMEN BARANG ---\n");
+        printf("1. Tambah Barang Baru\n");
+        printf("2. Restok Barang Lama\n");
+        printf("3. Hapus Barang\n");
+        printf("0. Kembali\n");
+        printf("Pilih: "); scanf("%d", &p);
+        switch(p) {
+            case 1: tambahBarang(); break;
+            case 2: restokBarang(); break;
+            case 3: hapusBarang(); break;
+        }
+    } while (p != 0);
+}
+void tambahBarang(){
+char nama[50], expired[20];
+    int stok, modal, harga;
+
+    printf("\n--- TAMBAH BARANG BARU ---\n");
+    printf("Nama barang : ");
+    scanf(" %[^\n]", nama);
+
+    for (int i = 0; i < jumlahBarang; i++) {
+        if (strcmp(gudang[i].nama, nama) == 0) {
+            printf("ERROR: Barang sudah ada! Gunakan menu 'Restok Barang'.\n");
+            return;
+        }
+    }
+
+    printf("Stok Awal   : "); scanf("%d", &stok);
+    printf("Harga BELI  : "); scanf("%d", &modal);
+    printf("Harga JUAL  : "); scanf("%d", &harga);
+    printf("Expired (YYYY-MM-DD): "); scanf(" %[^\n]", expired);
+
+    strcpy(gudang[jumlahBarang].nama, nama);
+    gudang[jumlahBarang].stok = stok;
+    gudang[jumlahBarang].modal = modal;
+    gudang[jumlahBarang].harga = harga;
+    strcpy(gudang[jumlahBarang].expired, expired);
+    
+    jumlahBarang++;
+    saveGudang();
+    printf("Barang baru berhasil ditambahkan!\n");
+}
+
+void restokBarang() {
+    char nama[50];
+    int tambahStok;
+
+    printf("\n--- RESTOK BARANG ---\n");
+    tampilGudang();
+    printf("Nama barang yang mau direstok: ");
+    scanf(" %[^\n]", nama);
+
 
 // Sub-Menu Gudang
 void menuManajemen(){
