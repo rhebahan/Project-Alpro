@@ -110,6 +110,27 @@ void menuGudang(){
     } while (p != 0);
 }
 
+// Menu Utama
+void menuGudang(){
+        int p;
+    do {
+        printf("\n=== MENU GUDANG ===\n");
+        printf("1. Manajemen Barang\n");
+        printf("2. Laporan Barang\n");
+        printf("3. Tampilkan Semua Barang\n");
+        printf("4. Cari Barang\n"); // <--- MENU BARU DITAMBAHKAN
+        printf("5. Reset Gudang\n");
+        printf("0. Kembali\n");
+        printf("Pilih: "); scanf("%d", &p);
+        switch(p) {
+            case 1: menuManajemen(); break;
+            case 2: menuLaporanBarang(); break;
+            case 3: tampilGudang(); break;
+            case 4: cariBarang(); break; // <--- PANGGIL FUNGSI
+            case 5: resetGudang(); break;
+        }
+    } while (p != 0);
+}
 
 void cariBarang(){
 
@@ -422,6 +443,12 @@ void laporanExp(){
 
 // Kasir
 void kasir(){
+    FILE *f = fopen("riwayat_penjualan.txt", "a");
+    if (!f) return;
+    int profit = (hargaJual - modal) * qty;
+    int omset = hargaJual * qty;
+    fprintf(f, "%s|%d|%d|%d\n", nama, qty, omset, profit);
+    fclose(f);
 
 }
 void laporanPenjualan(){
