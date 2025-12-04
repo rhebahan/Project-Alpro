@@ -32,6 +32,8 @@ int jumlahBarang = 0;
 // ==========================
 // PROTOTYPE
 // ==========================
+
+// sistem
 void saveGudang();
 void loadGudang();
 void resetGudang();
@@ -42,26 +44,32 @@ void menuKasir();
 
 // Sub-Menu Gudang
 void menuManajemen();
+void menuLaporanBarang();
+void menuSorting(); // <--- MENU BARU
+
+// Fungsi Operasional Gudang
 void tambahBarang();
 void restokBarang();
 void hapusBarang();
+void cariBarang();
+void tampilGudang();
 
-// Sub-Menu Laporan
-void menuLaporanBarang();
+// Fungsi Sorting
+void urutkanStok();    // <--- FUNGSI BARU
+void urutkanExpired(); // <--- FUNGSI BARU
+
+// Laporan
 void laporanStokMenipis();
 void laporanExp();
 
-// Helper Gudang
-void tampilGudang();
-void cariBarang();
-void sortingExpired();
-void getTanggalHariIni(char *buffer);
-
-// Kasir & Laporan Penjualan
+// Kasir
 void kasir();
 void laporanPenjualan();
 void catatLaporanPenjualan(char *nama, int qty, int modal, int hargaJual);
 void cetakStruk(ItemBeli list[], int n, int total);
+
+// Utils
+void getTanggalHariIni(char *buffer);
 
 
 void getTanggalHariIni(char *buffer) {
@@ -85,7 +93,16 @@ void loadGudang() {
 }
 
 void resetGudang(){
-
+    char yakin;
+    printf("\n!!! PERINGATAN: HAPUS SEMUA DATA !!!\n");
+    printf("Yakin? (y/n): ");
+    scanf(" %c", &yakin);
+    if (yakin == 'y' || yakin == 'Y') {
+        jumlahBarang = 0;
+        saveGudang();
+        remove("riwayat_penjualan.txt");
+        printf("Gudang berhasil di-reset.\n");
+    }
 }
 
 // Menu Utama
@@ -108,11 +125,6 @@ void menuGudang(){
             case 5: resetGudang(); break;
         }
     } while (p != 0);
-}
-
-
-void cariBarang(){
-
 }
 void menuKasir(){
 int p;
@@ -146,15 +158,8 @@ void menuManajemen(){
         }
     } while (p != 0);
 }
-void tambahBarang(){
-char nama[50], expired[20];
-    int stok, modal, harga;
-
-    printf("\n--- TAMBAH BARANG BARU ---\n");
-    printf("Nama barang : ");
-
 void cariBarang(){
-     nama[50];
+    char nama[50];
     printf("\n--- PENCARIAN BARANG ---\n");
     printf("Masukkan Nama Barang: ");
     scanf(" %[^\n]", nama);
@@ -184,175 +189,27 @@ void cariBarang(){
     if (!ditemukan) {
         printf("Barang '%s' tidak ditemukan di gudang.\n", nama);
     }
-// Menu Utama
-void menuGudang(){
-        int p;
-    do {
-        printf("\n=== MENU GUDANG ===\n");
-        printf("1. Manajemen Barang\n");
-        printf("2. Laporan Barang\n");
-        printf("3. Tampilkan Semua Barang\n");
-        printf("4. Cari Barang\n"); // <--- MENU BARU DITAMBAHKAN
-        printf("5. Reset Gudang\n");
-        printf("0. Kembali\n");
-        printf("Pilih: "); scanf("%d", &p);
-        switch(p) {
-            case 1: menuManajemen(); break;
-            case 2: menuLaporanBarang(); break;
-            case 3: tampilGudang(); break;
-            case 4: cariBarang(); break; // <--- PANGGIL FUNGSI
-            case 5: resetGudang(); break;
-        }
-    } while (p != 0);
 }
-
-void cariBarang(){
-
-}
-void menuKasir(){
-int p;
-    do {
-        printf("\n=== MENU KASIR ===\n");
-        printf("1. Transaksi Penjualan\n");
-        printf("2. Laporan Penjualan & Keuntungan\n");
-        printf("0. Kembali\n");
-        printf("Pilih: "); scanf("%d", &p);
-        switch(p) {
-            case 1: kasir(); break;
-            case 2: laporanPenjualan(); break;
-        }
-    } while (p != 0);
-}
-
-// Sub-Menu Gudang
-void menuManajemen(){
-    int p;
-    do {
-        printf("\n--- MANAJEMEN BARANG ---\n");
-        printf("1. Tambah Barang Baru\n");
-        printf("2. Restok Barang Lama\n");
-        printf("3. Hapus Barang\n");
-        printf("0. Kembali\n");
-        printf("Pilih: "); scanf("%d", &p);
-        switch(p) {
-            case 1: tambahBarang(); break;
-            case 2: restokBarang(); break;
-            case 3: hapusBarang(); break;
-        }
-    } while (p != 0);
-}
-void tambahBarang(){
-char nama[50], expired[20];
-    int stok, modal, harga;
-
-    printf("\n--- TAMBAH BARANG BARU ---\n");
-    printf("Nama barang : ");
-    scanf(" %[^\n]", nama);
-
-    for (int i = 0; i < jumlahBarang; i++) {
-        if (strcmp(gudang[i].nama, nama) == 0) {
-            printf("ERROR: Barang sudah ada! Gunakan menu 'Restok Barang'.\n");
-            return;
-        }
-    }
-
-    printf("Stok Awal   : "); scanf("%d", &stok);
-    printf("Harga BELI  : "); scanf("%d", &modal);
-    printf("Harga JUAL  : "); scanf("%d", &harga);
-    printf("Expired (YYYY-MM-DD): "); scanf(" %[^\n]", expired);
-
-    strcpy(gudang[jumlahBarang].nama, nama);
-    gudang[jumlahBarang].stok = stok;
-    gudang[jumlahBarang].modal = modal;
-    gudang[jumlahBarang].harga = harga;
-    strcpy(gudang[jumlahBarang].expired, expired);
-    
-    jumlahBarang++;
-    saveGudang();
-    printf("Barang baru berhasil ditambahkan!\n");
-}
-
 void restokBarang() {
     char nama[50];
     int tambahStok;
-
     printf("\n--- RESTOK BARANG ---\n");
     tampilGudang();
-    printf("Nama barang yang mau direstok: ");
-    scanf(" %[^\n]", nama);
-
-
-// Sub-Menu Gudang
-void menuManajemen(){
-    int p;
-    do {
-        printf("\n--- MANAJEMEN BARANG ---\n");
-        printf("1. Tambah Barang Baru\n");
-        printf("2. Restok Barang Lama\n");
-        printf("3. Hapus Barang\n");
-        printf("0. Kembali\n");
-        printf("Pilih: "); scanf("%d", &p);
-        switch(p) {
-            case 1: tambahBarang(); break;
-            case 2: restokBarang(); break;
-            case 3: hapusBarang(); break;
-        }
-    } while (p != 0);
-}
-void tambahBarang(){
-char nama[50], expired[20];
-    int stok, modal, harga;
-
-    printf("\n--- TAMBAH BARANG BARU ---\n");
-    printf("Nama barang : ");
-    scanf(" %[^\n]", nama);
+    printf("Nama barang: "); scanf(" %[^\n]", nama);
 
     for (int i = 0; i < jumlahBarang; i++) {
         if (strcmp(gudang[i].nama, nama) == 0) {
-            printf("ERROR: Barang sudah ada! Gunakan menu 'Restok Barang'.\n");
-            return;
-        }
-    }
-
-    printf("Stok Awal   : "); scanf("%d", &stok);
-    printf("Harga BELI  : "); scanf("%d", &modal);
-    printf("Harga JUAL  : "); scanf("%d", &harga);
-    printf("Expired (YYYY-MM-DD): "); scanf(" %[^\n]", expired);
-
-    strcpy(gudang[jumlahBarang].nama, nama);
-    gudang[jumlahBarang].stok = stok;
-    gudang[jumlahBarang].modal = modal;
-    gudang[jumlahBarang].harga = harga;
-    strcpy(gudang[jumlahBarang].expired, expired);
-    
-    jumlahBarang++;
-    saveGudang();
-    printf("Barang baru berhasil ditambahkan!\n");
-}
-
-void restokBarang() {
-    char nama[50];
-    int tambahStok;
-
-    printf("\n--- RESTOK BARANG ---\n");
-    tampilGudang();
-    printf("Nama barang yang mau direstok: ");
-    scanf(" %[^\n]", nama);
-
-    for (int i = 0; i < jumlahBarang; i++) {
-        if (strcmp(gudang[i].nama, nama) == 0) {
-            printf("Stok saat ini: %d\n", gudang[i].stok);
-            printf("Jumlah tambah stok: ");
+            printf("Stok saat ini: %d. Tambah: ", gudang[i].stok);
             scanf("%d", &tambahStok);
-
             gudang[i].stok += tambahStok;
             saveGudang();
-            printf("Berhasil! Stok %s sekarang menjadi %d.\n", nama, gudang[i].stok);
+            printf("Stok berhasil ditambah.\n");
             return;
         }
     }
     printf("Barang tidak ditemukan.\n");
 }
+
 
 void hapusBarang(){
     char nama[50];
@@ -375,26 +232,98 @@ void hapusBarang(){
 
 }
 
-// Menu Utama
-void menuGudang(){
-        int p;
-    do {
-        printf("\n=== MENU GUDANG ===\n");
-        printf("1. Manajemen Barang\n");
-        printf("2. Laporan Barang\n");
-        printf("3. Tampilkan Semua Barang\n");
-        printf("4. Cari Barang\n"); // <--- MENU BARU DITAMBAHKAN
-        printf("5. Reset Gudang\n");
-        printf("0. Kembali\n");
-        printf("Pilih: "); scanf("%d", &p);
-        switch(p) {
-            case 1: menuManajemen(); break;
-            case 2: menuLaporanBarang(); break;
-            case 3: tampilGudang(); break;
-            case 4: cariBarang(); break; // <--- PANGGIL FUNGSI
-            case 5: resetGudang(); break;
+void tampilGudang() {
+    if (jumlahBarang == 0) {
+        printf("\nGudang Kosong.\n"); return;
+    }
+    printf("\n%-3s | %-15s | %-5s | %-8s | %-8s | %-12s\n", 
+           "No", "Nama", "Stok", "Modal", "Jual", "Expired");
+    printf("-------------------------------------------------------------------\n");
+    
+    for (int i = 0; i < jumlahBarang; i++) {
+        printf("%-3d | %-15s | %-5d | %-8d | %-8d | %-12s\n",
+               i + 1, 
+               gudang[i].nama, 
+               gudang[i].stok, 
+               gudang[i].modal, 
+               gudang[i].harga,
+               gudang[i].expired);
+    }
+    printf("-------------------------------------------------------------------\n");
+}
+
+void tambahBarang() {
+    char nama[50], expired[20];
+    int stok, modal, harga;
+
+    printf("\n--- TAMBAH BARANG BARU ---\n");
+    printf("Nama barang : "); scanf(" %[^\n]", nama);
+
+    for (int i = 0; i < jumlahBarang; i++) {
+        if (strcmp(gudang[i].nama, nama) == 0) {
+            printf("ERROR: Barang sudah ada! Gunakan menu 'Restok Barang'.\n"); return;
         }
-    } while (p != 0);
+    }
+    printf("Stok Awal   : "); scanf("%d", &stok);
+    printf("Harga BELI  : "); scanf("%d", &modal);
+    printf("Harga JUAL  : "); scanf("%d", &harga);
+    printf("Expired (YYYY-MM-DD): "); scanf(" %[^\n]", expired);
+
+    strcpy(gudang[jumlahBarang].nama, nama);
+    gudang[jumlahBarang].stok = stok;
+    gudang[jumlahBarang].modal = modal;
+    gudang[jumlahBarang].harga = harga;
+    strcpy(gudang[jumlahBarang].expired, expired);
+    
+    jumlahBarang++;
+    saveGudang();
+    printf("Barang baru berhasil ditambahkan!\n");
+}
+
+
+// SORTING
+
+void urutkanStok() {
+    if (jumlahBarang < 2) {
+        printf("Data kurang untuk diurutkan.\n");
+        return;
+    }
+
+    // Bubble Sort Ascending (Kecil -> Besar)
+    for (int i = 0; i < jumlahBarang - 1; i++) {
+        for (int j = 0; j < jumlahBarang - i - 1; j++) {
+            if (gudang[j].stok > gudang[j + 1].stok) {
+                Barang temp = gudang[j];
+                gudang[j] = gudang[j + 1];
+                gudang[j + 1] = temp;
+            }
+        }
+    }
+    saveGudang(); // Simpan urutan baru
+    printf("\nBerhasil diurutkan berdasarkan STOK (Sedikit -> Banyak).\n");
+    tampilGudang();
+}
+
+void urutkanExpired() {
+    if (jumlahBarang < 2) {
+        printf("Data kurang untuk diurutkan.\n");
+        return;
+    }
+
+    // Bubble Sort Ascending (Tanggal Dulu -> Tanggal Nanti)
+    // Menggunakan strcmp: "2024-01-01" < "2024-05-05"
+    for (int i = 0; i < jumlahBarang - 1; i++) {
+        for (int j = 0; j < jumlahBarang - i - 1; j++) {
+            if (strcmp(gudang[j].expired, gudang[j + 1].expired) > 0) {
+                Barang temp = gudang[j];
+                gudang[j] = gudang[j + 1];
+                gudang[j + 1] = temp;
+            }
+        }
+    }
+    saveGudang(); // Simpan urutan baru
+    printf("\nBerhasil diurutkan berdasarkan EXPIRED (Terdekat -> Terlama).\n");
+    tampilGudang();
 }
 
 // Sub-Menu Laporan
@@ -438,179 +367,55 @@ void laporanExp(){
         char status[20] = "Aman";
         if (strcmp(gudang[i].expired, today) < 0) strcpy(status, "BASI!");
         else if (strncmp(gudang[i].expired, today, 7) == 0) strcpy(status, "Bulan Ini!");
-        
         printf("%-20s | %-12s | %s\n", gudang[i].nama, gudang[i].expired, status);
     }
-void cariBarang(){
-
-}
-void menuKasir(){
-int p;
-    do {
-        printf("\n=== MENU KASIR ===\n");
-        printf("1. Transaksi Penjualan\n");
-        printf("2. Laporan Penjualan & Keuntungan\n");
-        printf("0. Kembali\n");
-        printf("Pilih: "); scanf("%d", &p);
-        switch(p) {
-            case 1: kasir(); break;
-            case 2: laporanPenjualan(); break;
-        }
-    } while (p != 0);
-}
-
-// Sub-Menu Gudang
-void menuManajemen(){
-    int p;
-    do {
-        printf("\n--- MANAJEMEN BARANG ---\n");
-        printf("1. Tambah Barang Baru\n");
-        printf("2. Restok Barang Lama\n");
-        printf("3. Hapus Barang\n");
-        printf("0. Kembali\n");
-        printf("Pilih: "); scanf("%d", &p);
-        switch(p) {
-            case 1: tambahBarang(); break;
-            case 2: restokBarang(); break;
-            case 3: hapusBarang(); break;
-        }
-    } while (p != 0);
-}
-void tambahBarang(){
-char nama[50], expired[20];
-    int stok, modal, harga;
-
-    printf("\n--- TAMBAH BARANG BARU ---\n");
-    printf("Nama barang : ");
-    scanf(" %[^\n]", nama);
-
-    for (int i = 0; i < jumlahBarang; i++) {
-        if (strcmp(gudang[i].nama, nama) == 0) {
-            printf("ERROR: Barang sudah ada! Gunakan menu 'Restok Barang'.\n");
-            return;
-        }
-    }
-
-    printf("Stok Awal   : "); scanf("%d", &stok);
-    printf("Harga BELI  : "); scanf("%d", &modal);
-    printf("Harga JUAL  : "); scanf("%d", &harga);
-    printf("Expired (YYYY-MM-DD): "); scanf(" %[^\n]", expired);
-
-    strcpy(gudang[jumlahBarang].nama, nama);
-    gudang[jumlahBarang].stok = stok;
-    gudang[jumlahBarang].modal = modal;
-    gudang[jumlahBarang].harga = harga;
-    strcpy(gudang[jumlahBarang].expired, expired);
-    
-    jumlahBarang++;
-    saveGudang();
-    printf("Barang baru berhasil ditambahkan!\n");
-}
-
-void restokBarang() {
-    char nama[50];
-    int tambahStok;
-
-    printf("\n--- RESTOK BARANG ---\n");
-    tampilGudang();
-    printf("Nama barang yang mau direstok: ");
-    scanf(" %[^\n]", nama);
-
-    for (int i = 0; i < jumlahBarang; i++) {
-        if (strcmp(gudang[i].nama, nama) == 0) {
-            printf("ERROR: Barang sudah ada! Gunakan menu 'Restok Barang'.\n");
-            return;
-        }
-    }
-
-    printf("Stok Awal   : "); scanf("%d", &stok);
-    printf("Harga BELI  : "); scanf("%d", &modal);
-    printf("Harga JUAL  : "); scanf("%d", &harga);
-    printf("Expired (YYYY-MM-DD): "); scanf(" %[^\n]", expired);
-
-    strcpy(gudang[jumlahBarang].nama, nama);
-    gudang[jumlahBarang].stok = stok;
-    gudang[jumlahBarang].modal = modal;
-    gudang[jumlahBarang].harga = harga;
-    strcpy(gudang[jumlahBarang].expired, expired);
-    
-    jumlahBarang++;
-    saveGudang();
-    printf("Barang baru berhasil ditambahkan!\n");
-}
-
-void restokBarang() {
-    char nama[50];
-    int tambahStok;
-
-    printf("\n--- RESTOK BARANG ---\n");
-    tampilGudang();
-    printf("Nama barang yang mau direstok: ");
-    scanf(" %[^\n]", nama);
-
-    for (int i = 0; i < jumlahBarang; i++) {
-        if (strcmp(gudang[i].nama, nama) == 0) {
-            printf("Stok saat ini: %d\n", gudang[i].stok);
-            printf("Jumlah tambah stok: ");
-            scanf("%d", &tambahStok);
-
-            gudang[i].stok += tambahStok;
-            saveGudang();
-            printf("Berhasil! Stok %s sekarang menjadi %d.\n", nama, gudang[i].stok);
-            return;
-        }
-    }
-    printf("Barang tidak ditemukan.\n");
-}
-
-void hapusBarang(){
-    char nama[50];
-    printf("\n--- HAPUS BARANG ---\n");
-    printf("Nama barang yang dihapus: ");
-    scanf(" %[^\n]", nama);
-
-    for (int i = 0; i < jumlahBarang; i++) {
-        if (strcmp(gudang[i].nama, nama) == 0) {
-            for (int j = i; j < jumlahBarang - 1; j++)
-                gudang[j] = gudang[j + 1];
-
-            jumlahBarang--;
-            saveGudang();
-            printf("Barang berhasil dihapus!\n");
-            return;
-        }
-    }
-    printf("Barang tidak ditemukan.\n");
-}
-
-// Sub-Menu Laporan
-void menuLaporanBarang(){
-    int p;
-    do {
-        printf("\n--- LAPORAN GUDANG ---\n");
-        printf("1. Laporan Stok Menipis\n");
-        printf("2. Laporan Expired\n");
-        printf("0. Kembali\n");
-        printf("Pilih: "); scanf("%d", &p);
-        switch(p) {
-            case 1: laporanStokMenipis(); break;
-            case 2: laporanExp(); break;
-        }
-    } while (p != 0);
-}
-void laporanStokMenipis(){
-
-}
-void laporanExp(){
-
 }
 
 // Kasir
 void kasir(){
+    int jumlahItem = 0; ItemBeli list[50]; int totalBayar = 0;
+    printf("\n=== TRANSAKSI KASIR ===\n");
+    tampilGudang();
+    while (1) {
+        char nama[50]; int qty;
+        printf("\nNama barang (ketik 'selesai'): "); scanf(" %[^\n]", nama);
+        if (strcmp(nama, "selesai") == 0) break;
+        int idx = -1;
+        for (int i = 0; i < jumlahBarang; i++) {
+            if (strcmp(gudang[i].nama, nama) == 0) { idx = i; break; }
+        }
+        if (idx == -1) { printf("Barang tidak ada.\n"); continue; }
+        printf("Jumlah beli: "); scanf("%d", &qty);
+        if (qty > gudang[idx].stok) { printf("Stok kurang!\n"); continue; }
 
+        gudang[idx].stok -= qty;
+        strcpy(list[jumlahItem].nama, nama);
+        list[jumlahItem].jumlah = qty;
+        list[jumlahItem].subtotal = gudang[idx].harga * qty;
+        catatLaporanPenjualan(nama, qty, gudang[idx].modal, gudang[idx].harga);
+        totalBayar += list[jumlahItem].subtotal;
+        jumlahItem++;
+        saveGudang();
+        printf(">> %s berhasil diinput.\n", nama);
+    }
+    if (jumlahItem > 0) {
+        cetakStruk(list, jumlahItem, totalBayar);
+        printf("Total: Rp %d\n", totalBayar);
+    }
 }
+
+void catatLaporanPenjualan(char *nama, int qty, int modal, int hargaJual) {
+    FILE *f = fopen("riwayat_penjualan.txt", "a");
+    if (!f) return;
+    int profit = (hargaJual - modal) * qty;
+    int omset = hargaJual * qty;
+    fprintf(f, "%s|%d|%d|%d\n", nama, qty, omset, profit);
+    fclose(f);
+}
+
+
 void laporanPenjualan(){
-FILE *f = fopen("riwayat_penjualan.txt", "r");
+    FILE *f = fopen("riwayat_penjualan.txt", "r");
     if (!f) { printf("\nBelum ada data penjualan.\n"); return; }
     char line[100], nama[50];
     int qty, omset, profit;
@@ -627,19 +432,16 @@ FILE *f = fopen("riwayat_penjualan.txt", "r");
     printf("TOTAL OMSET : Rp %ld\n", totalOmset);
     printf("TOTAL PROFIT: Rp %ld\n", totalProfit);
     fclose(f);
-    FILE *f = fopen("riwayat_penjualan.txt", "a");
-    if (!f) return;
-    int profit = (hargaJual - modal) * qty;
-    int omset = hargaJual * qty;
-    fprintf(f, "%s|%d|%d|%d\n", nama, qty, omset, profit);
-    fclose(f);
-
 }
-void laporanPenjualan(){
 
-}
+
 void cetakStruk(ItemBeli list[], int n, int total){
-
+    FILE *f = fopen("struk_terakhir.txt", "w");
+    fprintf(f, "======= STRUK BELANJA =======\n");
+    for (int i = 0; i < n; i++) fprintf(f, "%s x%d = %d\n", list[i].nama, list[i].jumlah, list[i].subtotal);
+    fprintf(f, "\nTOTAL = %d\n", total);
+    fclose(f);
+    printf("Struk dicetak ke 'struk_terakhir.txt'\n");
 }
 
 
