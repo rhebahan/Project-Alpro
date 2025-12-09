@@ -45,7 +45,7 @@ void menuKasir();
 // Sub-Menu Gudang
 void menuManajemen();
 void menuLaporanBarang();
-void menuSorting(); // <--- MENU BARU
+void menuSorting();
 
 // Fungsi Operasional Gudang
 void tambahBarang();
@@ -55,9 +55,8 @@ void cariBarang();
 void tampilGudang();
 
 // Fungsi Sorting
-void urutkanStok();    // <--- FUNGSI BARU
-void urutkanExpired(); // <--- FUNGSI BARU
-
+void urutkanStok();  
+void urutkanExpired();
 // Laporan
 void laporanStokMenipis();
 void laporanExp();
@@ -79,16 +78,33 @@ void getTanggalHariIni(char *buffer) {
 }
 
 void saveGudang() {
-    FILE *f = fopen("gudang.dat", "wb");
-    fwrite(&jumlahBarang, sizeof(int), 1, f);
-    fwrite(gudang, sizeof(Barang), jumlahBarang, f);
+    FILE *f = fopen("gudang.txt", "w");
+    fprintf(f, "%d\n", jumlahBarang);
+    for(int i=0; i<jumlahBarang; i++){
+        fprintf(f, "%s|%d|%d|%d|%s\n",
+            gudang[i].nama,
+            gudang[i].stok,
+            gudang[i].modal,
+            gudang[i].harga,
+            gudang[i].expired
+        );
+    }
     fclose(f);
 }
 
 void loadGudang() {
-    FILE *f = fopen("gudang.dat", "rb");
-    fread(&jumlahBarang, sizeof(int), 1, f);
-    fread(gudang, sizeof(Barang), jumlahBarang, f);
+    FILE *f = fopen("gudang.txt", "r");
+    if (!f) return; 
+    fscanf(f, "%d\n", &jumlahBarang);
+    for(int i=0; i<jumlahBarang; i++){
+        fscanf(f, "%[^|]|%d|%d|%d|%[^\n]\n",
+            gudang[i].nama,
+            &gudang[i].stok,
+            &gudang[i].modal,
+            &gudang[i].harga,
+            gudang[i].expired
+        );
+    }
     fclose(f);
 }
 
