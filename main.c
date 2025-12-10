@@ -165,15 +165,36 @@ void menuManajemen(){
         printf("1. Tambah Barang Baru\n");
         printf("2. Restok Barang Lama\n");
         printf("3. Hapus Barang\n");
+        printf("4. Sorting Barang\n");
         printf("0. Kembali\n");
         printf("Pilih: "); scanf("%d", &p);
         switch(p) {
             case 1: tambahBarang(); break;
             case 2: restokBarang(); break;
             case 3: hapusBarang(); break;
+            case 4: menuSorting(); break;
         }
     } while (p != 0);
 }
+
+void menuSorting(){
+    int p;
+    do{
+        printf("\n--- MENU SORTING ---\n");
+        printf("1. Sorting Menurut Stok\n");
+        printf("2. Sorting Menurut Expired\n"); 
+        printf("pilih: ");
+        scanf("%d", &p);
+        switch(p) {
+            case 1: urutkanStok(); 
+            break;
+            case 2: urutkanExpired(); 
+            break;
+        }
+
+    } while(p != 0);
+}
+
 void cariBarang(){
     char nama[50];
     printf("\n--- PENCARIAN BARANG ---\n");
@@ -478,3 +499,4 @@ int main() {
     return 0;
 
 }
+
