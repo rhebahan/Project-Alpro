@@ -129,16 +129,14 @@ void menuGudang(){
         printf("1. Manajemen Barang\n");
         printf("2. Laporan Barang\n");
         printf("3. Tampilkan Semua Barang\n");
-        printf("4. Cari Barang\n"); // <--- MENU BARU DITAMBAHKAN
-        printf("5. Reset Gudang\n");
+        printf("4. Cari Barang\n"); 
         printf("0. Kembali\n");
         printf("Pilih: "); scanf("%d", &p);
         switch(p) {
             case 1: menuManajemen(); break;
             case 2: menuLaporanBarang(); break;
             case 3: tampilGudang(); break;
-            case 4: cariBarang(); break; // <--- PANGGIL FUNGSI
-            case 5: resetGudang(); break;
+            case 4: cariBarang(); break; 
         }
     } while (p != 0);
 }
@@ -165,14 +163,14 @@ void menuManajemen(){
         printf("1. Tambah Barang Baru\n");
         printf("2. Restok Barang Lama\n");
         printf("3. Hapus Barang\n");
-        printf("4. Sorting Barang\n");
+        printf("4. Reset Gudang\n");
         printf("0. Kembali\n");
         printf("Pilih: "); scanf("%d", &p);
         switch(p) {
             case 1: tambahBarang(); break;
             case 2: restokBarang(); break;
             case 3: hapusBarang(); break;
-            case 4: menuSorting(); break;
+            case 4: resetGudang(); break;
         }
     } while (p != 0);
 }
@@ -370,11 +368,13 @@ void menuLaporanBarang(){
         printf("\n--- LAPORAN GUDANG ---\n");
         printf("1. Laporan Stok Menipis\n");
         printf("2. Laporan Expired\n");
+        printf("3. Sorting Barang\n");
         printf("0. Kembali\n");
         printf("Pilih: "); scanf("%d", &p);
         switch(p) {
             case 1: laporanStokMenipis(); break;
             case 2: laporanExp(); break;
+            case 3: menuSorting(); break; 
         }
     } while (p != 0);
 }
