@@ -180,7 +180,8 @@ void menuSorting(){
     do{
         printf("\n--- MENU SORTING ---\n");
         printf("1. Sorting Menurut Stok\n");
-        printf("2. Sorting Menurut Expired\n"); 
+        printf("2. Sorting Menurut Expired\n");
+        printf("0. Kembali\n");
         printf("pilih: ");
         scanf("%d", &p);
         switch(p) {
