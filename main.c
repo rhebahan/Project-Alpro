@@ -208,7 +208,6 @@ void cariBarang(){
     printf("-------------------------------------------------------------\n");
 
     for (int i = 0; i < jumlahBarang; i++) {
-        // Menggunakan strcmp (pencarian persis)
         if (strcmp(gudang[i].nama, nama) == 0) {
             printf("%-15s | %-5d | %-8d | %-8d | %-12s\n", 
                    gudang[i].nama, 
@@ -217,7 +216,7 @@ void cariBarang(){
                    gudang[i].harga,
                    gudang[i].expired);
             ditemukan = 1;
-            break; // Berhenti jika sudah ketemu (karena nama unik)
+            break;
         }
     }
     printf("-------------------------------------------------------------\n");
@@ -335,7 +334,7 @@ void urutkanStok() {
             }
         }
     }
-    saveGudang(); // Simpan urutan baru
+    saveGudang();
     printf("\nBerhasil diurutkan berdasarkan STOK (Sedikit -> Banyak).\n");
     tampilGudang();
 }
@@ -357,7 +356,7 @@ void urutkanExpired() {
             }
         }
     }
-    saveGudang(); // Simpan urutan baru
+    saveGudang(); 
     printf("\nBerhasil diurutkan berdasarkan EXPIRED (Terdekat -> Terlama).\n");
     tampilGudang();
 }
@@ -394,7 +393,6 @@ void laporanStokMenipis(){
 void laporanExp(){
     char today[20];
     getTanggalHariIni(today);
-    // Kita panggil fungsi sorting expired agar tampilan otomatis urut
     urutkanExpired(); 
 
     printf("\n--- STATUS EXPIRED (Hari ini: %s) ---\n", today);
@@ -420,11 +418,20 @@ void kasir(){
         if (strcmp(nama, "selesai") == 0) break;
         int idx = -1;
         for (int i = 0; i < jumlahBarang; i++) {
-            if (strcmp(gudang[i].nama, nama) == 0) { idx = i; break; }
+            if (strcmp(gudang[i].nama, nama) == 0) { 
+                idx = i; 
+                break; }
         }
-        if (idx == -1) { printf("Barang tidak ada.\n"); continue; }
-        printf("Jumlah beli: "); scanf("%d", &qty);
-        if (qty > gudang[idx].stok) { printf("Stok kurang!\n"); continue; }
+        if (idx == -1) { 
+            printf("Barang tidak ada.\n"); 
+            continue; }
+        
+        printf("Jumlah beli: "); 
+        scanf("%d", &qty);
+        
+        if (qty > gudang[idx].stok) { 
+            printf("Stok kurang!\n"); 
+            continue; }
 
         gudang[idx].stok -= qty;
         strcpy(list[jumlahItem].nama, nama);
@@ -500,4 +507,5 @@ int main() {
     return 0;
 
 }
+
 
