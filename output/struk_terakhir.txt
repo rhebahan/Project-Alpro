@@ -1,6 +1,0 @@
-======= STRUK BELANJA =======
-roti x3 = 150000
-kopi x12 = 36000
-beras x12 = 900000
-
-TOTAL = 1086000
