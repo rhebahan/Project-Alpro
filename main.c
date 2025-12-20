@@ -55,9 +55,8 @@ void cariBarang();
 void tampilGudang();
 
 // Fungsi Sorting
-void menuSorting();
-void urutkanStok();    // <--- FUNGSI BARU
-void urutkanExpired(); // <--- FUNGSI BARU
+void urutkanStok();  
+void urutkanExpired();
 
 // Laporan
 void laporanStokMenipis();
@@ -80,16 +79,33 @@ void getTanggalHariIni(char *buffer) {
 }
 
 void saveGudang() {
-    FILE *f = fopen("gudang.dat", "wb");
-    fwrite(&jumlahBarang, sizeof(int), 1, f);
-    fwrite(gudang, sizeof(Barang), jumlahBarang, f);
+    FILE *f = fopen("gudang.txt", "w");
+    fprintf(f, "%d\n", jumlahBarang);
+    for(int i=0; i<jumlahBarang; i++){
+        fprintf(f, "%s|%d|%d|%d|%s\n",
+            gudang[i].nama,
+            gudang[i].stok,
+            gudang[i].modal,
+            gudang[i].harga,
+            gudang[i].expired
+        );
+    }
     fclose(f);
 }
 
 void loadGudang() {
-    FILE *f = fopen("gudang.dat", "rb");
-    fread(&jumlahBarang, sizeof(int), 1, f);
-    fread(gudang, sizeof(Barang), jumlahBarang, f);
+    FILE *f = fopen("gudang.txt", "r");
+    if (!f) return; 
+    fscanf(f, "%d\n", &jumlahBarang);
+    for(int i=0; i<jumlahBarang; i++){
+        fscanf(f, "%[^|]|%d|%d|%d|%[^\n]\n",
+            gudang[i].nama,
+            &gudang[i].stok,
+            &gudang[i].modal,
+            &gudang[i].harga,
+            gudang[i].expired
+        );
+    }
     fclose(f);
 }
 
@@ -112,9 +128,9 @@ void menuGudang(){
     do {
         printf("\n=== MENU GUDANG ===\n");
         printf("1. Manajemen Barang\n");
-        printf("2. Laporan Barang\n");
+        printf("2. Laporan Gudang\n");
         printf("3. Tampilkan Semua Barang\n");
-        printf("4. Cari Barang\n"); // <--- MENU BARU DITAMBAHKAN
+        printf("4. Cari Barang\n"); 
         printf("5. Reset Gudang\n");
         printf("0. Kembali\n");
         printf("Pilih: "); scanf("%d", &p);
@@ -122,7 +138,7 @@ void menuGudang(){
             case 1: menuManajemen(); break;
             case 2: menuLaporanBarang(); break;
             case 3: tampilGudang(); break;
-            case 4: cariBarang(); break; // <--- PANGGIL FUNGSI
+            case 4: cariBarang(); break; 
             case 5: resetGudang(); break;
         }
     } while (p != 0);
@@ -167,13 +183,17 @@ void menuSorting(){
     do{
         printf("\n--- MENU SORTING ---\n");
         printf("1. Sorting Menurut Stok\n");
-        printf("2. Sorting Menurut Expired\n"); 
+        printf("2. Sorting Menurut Expired\n");
+        printf("0. Kembali\n");
         printf("pilih: ");
         scanf("%d", &p);
         switch(p) {
-            case 1: urutkanStok(); break;
-            case 2: urutkanExpired(); break;
+            case 1: urutkanStok(); 
+            break;
+            case 2: urutkanExpired(); 
+            break;
         }
+
     } while(p != 0);
 }
 
@@ -191,7 +211,6 @@ void cariBarang(){
     printf("-------------------------------------------------------------\n");
 
     for (int i = 0; i < jumlahBarang; i++) {
-        // Menggunakan strcmp (pencarian persis)
         if (strcmp(gudang[i].nama, nama) == 0) {
             printf("%-15s | %-5d | %-8d | %-8d | %-12s\n", 
                    gudang[i].nama, 
@@ -200,7 +219,7 @@ void cariBarang(){
                    gudang[i].harga,
                    gudang[i].expired);
             ditemukan = 1;
-            break; // Berhenti jika sudah ketemu (karena nama unik)
+            break;
         }
     }
     printf("-------------------------------------------------------------\n");
@@ -318,7 +337,7 @@ void urutkanStok() {
             }
         }
     }
-    saveGudang(); // Simpan urutan baru
+    saveGudang();
     printf("\nBerhasil diurutkan berdasarkan STOK (Sedikit -> Banyak).\n");
     tampilGudang();
 }
@@ -340,7 +359,7 @@ void urutkanExpired() {
             }
         }
     }
-    saveGudang(); // Simpan urutan baru
+    saveGudang(); 
     printf("\nBerhasil diurutkan berdasarkan EXPIRED (Terdekat -> Terlama).\n");
     tampilGudang();
 }
@@ -352,11 +371,13 @@ void menuLaporanBarang(){
         printf("\n--- LAPORAN GUDANG ---\n");
         printf("1. Laporan Stok Menipis\n");
         printf("2. Laporan Expired\n");
+        printf("3. Sorting Barang\n");
         printf("0. Kembali\n");
         printf("Pilih: "); scanf("%d", &p);
         switch(p) {
             case 1: laporanStokMenipis(); break;
             case 2: laporanExp(); break;
+            case 3: menuSorting(); break; 
         }
     } while (p != 0);
 }
@@ -375,7 +396,6 @@ void laporanStokMenipis(){
 void laporanExp(){
     char today[20];
     getTanggalHariIni(today);
-    // Kita panggil fungsi sorting expired agar tampilan otomatis urut
     urutkanExpired(); 
 
     printf("\n--- STATUS EXPIRED (Hari ini: %s) ---\n", today);
@@ -401,11 +421,20 @@ void kasir(){
         if (strcmp(nama, "selesai") == 0) break;
         int idx = -1;
         for (int i = 0; i < jumlahBarang; i++) {
-            if (strcmp(gudang[i].nama, nama) == 0) { idx = i; break; }
+            if (strcmp(gudang[i].nama, nama) == 0) { 
+                idx = i; 
+                break; }
         }
-        if (idx == -1) { printf("Barang tidak ada.\n"); continue; }
-        printf("Jumlah beli: "); scanf("%d", &qty);
-        if (qty > gudang[idx].stok) { printf("Stok kurang!\n"); continue; }
+        if (idx == -1) { 
+            printf("Barang tidak ada.\n"); 
+            continue; }
+        
+        printf("Jumlah beli: "); 
+        scanf("%d", &qty);
+        
+        if (qty > gudang[idx].stok) { 
+            printf("Stok kurang!\n"); 
+            continue; }
 
         gudang[idx].stok -= qty;
         strcpy(list[jumlahItem].nama, nama);
@@ -481,3 +510,5 @@ int main() {
     return 0;
 
 }
+
+
