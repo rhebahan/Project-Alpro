@@ -128,7 +128,7 @@ void menuGudang(){
     do {
         printf("\n=== MENU GUDANG ===\n");
         printf("1. Manajemen Barang\n");
-        printf("2. Laporan Gudang\n");
+        printf("2. Laporan BARANG\n");
         printf("3. Tampilkan Semua Barang\n");
         printf("4. Cari Barang\n"); 
         printf("5. Reset Gudang\n");
@@ -368,7 +368,7 @@ void urutkanExpired() {
 void menuLaporanBarang(){
     int p;
     do {
-        printf("\n--- LAPORAN GUDANG ---\n");
+        printf("\n--- LAPORAN BARANG ---\n");
         printf("1. Laporan Stok Menipis\n");
         printf("2. Laporan Expired\n");
         printf("3. Sorting Barang\n");
@@ -498,6 +498,7 @@ int main() {
     int p;
     do {
         printf("\n======= SISTEM MANAJEMEN GUDANG TOKO KLONTONG =======\n");
+        printf("==================== MENU UTAMA =======================\n");
         printf("1. Gudang\n");
         printf("2. Kasir\n");
         printf("0. Keluar\n");
