@@ -57,7 +57,7 @@ void cariBarang();
 void sortingExpired();
 void getTanggalHariIni(char *buffer);
 
-// Kasir & Laporan Penjualan
+//Bagian Kasir & Laporan Penjualan
 void kasir();
 void laporanPenjualan();
 void catatLaporanPenjualan(char *nama, int qty, int modal, int hargaJual);
@@ -192,7 +192,7 @@ void menuGudang(){
         printf("1. Manajemen Barang\n");
         printf("2. Laporan Barang\n");
         printf("3. Tampilkan Semua Barang\n");
-        printf("4. Cari Barang\n"); // <--- MENU BARU DITAMBAHKAN
+        printf("4. Cari Barang\n"); 
         printf("5. Reset Gudang\n");
         printf("0. Kembali\n");
         printf("Pilih: "); scanf("%d", &p);
@@ -200,7 +200,7 @@ void menuGudang(){
             case 1: menuManajemen(); break;
             case 2: menuLaporanBarang(); break;
             case 3: tampilGudang(); break;
-            case 4: cariBarang(); break; // <--- PANGGIL FUNGSI
+            case 4: cariBarang(); break; 
             case 5: resetGudang(); break;
         }
     } while (p != 0);
@@ -660,3 +660,4 @@ int main() {
     return 0;
 
 }
+
