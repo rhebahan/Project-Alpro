@@ -8,6 +8,7 @@
 // ==========================
 // STRUCT
 // ==========================
+
 typedef struct {
     char nama[50];
     int stok;
@@ -474,5 +475,6 @@ int main() {
         }
     } while (p != 0);
     return 0;
+
 
 }
