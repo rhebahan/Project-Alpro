@@ -8,6 +8,7 @@
 // ==========================
 // STRUCT
 // ==========================
+
 typedef struct {
     char nama[50];
     int stok;
@@ -26,6 +27,7 @@ typedef struct {
 // ==========================
 // GLOBAL
 // ==========================
+
 Barang gudang[MAX];
 int jumlahBarang = 0;
 
@@ -510,6 +512,7 @@ int main() {
     return 0;
 
 }
+
 
 
 
