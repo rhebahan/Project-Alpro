@@ -131,7 +131,7 @@ void menuGudang(){
     do {
         printf("\n=== MENU GUDANG ===\n");
         printf("1. Manajemen Barang\n");
-        printf("2. Laporan BARANG\n");
+        printf("2. Laporan Barang\n");
         printf("3. Tampilkan Semua Barang\n");
         printf("4. Cari Barang\n"); 
         printf("5. Reset Gudang\n");
@@ -169,14 +169,12 @@ void menuManajemen(){
         printf("1. Tambah Barang Baru\n");
         printf("2. Restok Barang Lama\n");
         printf("3. Hapus Barang\n");
-        printf("4. Sorting Barang\n");
         printf("0. Kembali\n");
         printf("Pilih: "); scanf("%d", &p);
         switch(p) {
             case 1: tambahBarang(); break;
             case 2: restokBarang(); break;
             case 3: hapusBarang(); break;
-            case 4: menuSorting(); break;
         }
     } while (p != 0);
 }
@@ -514,6 +512,7 @@ int main() {
     return 0;
 
 }
+
 
 
 
