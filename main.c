@@ -71,7 +71,6 @@ void cetakStruk(ItemBeli list[], int n, int total);
 // Utils
 void getTanggalHariIni(char *buffer);
 
-
 void getTanggalHariIni(char *buffer) {
     time_t t = time(NULL);
     struct tm tm = *localtime(&t);
@@ -511,5 +510,6 @@ int main() {
     return 0;
 
 }
+
 
 
