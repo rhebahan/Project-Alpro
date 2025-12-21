@@ -189,9 +189,13 @@ void menuSorting(){
         printf("pilih: ");
         scanf("%d", &p);
         switch(p) {
-            case 1: urutkanStok(); 
+            case 1: urutkanStok();
+                printf("\nBerhasil diurutkan berdasarkan STOK (Sedikit -> Banyak).\n");
+                tampilGudang();
             break;
             case 2: urutkanExpired(); 
+                printf("\nBerhasil diurutkan berdasarkan EXPIRED (Terdekat -> Terlama).\n");
+                tampilGudang();
             break;
         }
 
@@ -339,8 +343,6 @@ void urutkanStok() {
         }
     }
     saveGudang();
-    printf("\nBerhasil diurutkan berdasarkan STOK (Sedikit -> Banyak).\n");
-    tampilGudang();
 }
 
 void urutkanExpired() {
@@ -361,8 +363,6 @@ void urutkanExpired() {
         }
     }
     saveGudang(); 
-    printf("\nBerhasil diurutkan berdasarkan EXPIRED (Terdekat -> Terlama).\n");
-    tampilGudang();
 }
 
 // Sub-Menu Laporan
@@ -512,6 +512,7 @@ int main() {
     return 0;
 
 }
+
 
 
 
