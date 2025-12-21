@@ -94,6 +94,7 @@ void saveGudang() {
     fclose(f);
 }
 
+
 void loadGudang() {
     FILE *f = fopen("gudang.txt", "r");
     if (!f) return; 
@@ -512,6 +513,7 @@ int main() {
     return 0;
 
 }
+
 
 
 
