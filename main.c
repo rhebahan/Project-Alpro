@@ -9,6 +9,7 @@
 // STRUCT
 // ==========================
 
+
 typedef struct {
     char nama[50];
     int stok;
@@ -513,6 +514,7 @@ int main() {
     return 0;
 
 }
+
 
 
 
